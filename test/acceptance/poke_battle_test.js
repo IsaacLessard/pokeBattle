@@ -42,7 +42,7 @@ describe('Pokemon Battle', function(){
     })
 
     it('User can choose a pokemon and enter battle', function (){
-      element(by.tagName('li')).click()
+      element(by.tagName('a')).click()
       element(by.tagName('h1')).getText().then(function(text){
         expect(text).to.equal('Poke Battle!');
       });
