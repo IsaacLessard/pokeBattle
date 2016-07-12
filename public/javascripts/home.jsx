@@ -3,7 +3,7 @@ var Pokemon = React.createClass({
 
   render: function(){
     return (
-      <li>{this.props.name}</li>
+      <li><img src={"http://pokeapi.co"+this.props.image}/>{this.props.name}</li>
     )
   }
 })
@@ -67,8 +67,8 @@ var PokemonList = React.createClass({
   render: function () {
     var pokemons = this.props.pokemon.map(function(pokemon, index){
       return (
-        <Pokemon name={pokemon} key={index}/>
-      )});
+        <Pokemon name={pokemon} key={index} image={this.props.images[index]}/>
+      )}.bind(this));
     return (
       <ul>
         {pokemons}
@@ -82,19 +82,25 @@ var HomePage = React.createClass({
 
   getInitialState: function() {
      return {
-       selectedPokemon: []
+       selectedPokemon: [],
+       pokemonImages: []
+
      };
    },
 
   componentDidMount: function(){
-    this.serverRequest = $.get("http://pokeapi.co/api/v2/pokemon?limit=721", function(pokemon){
+    this.serverRequest = $.get("http://pokeapi.co/api/v1/sprite/?limit=151", function(pokemon){
+      console.log(pokemon);
       var selectedpokemon = [];
+      var pokeImgs = [];
       for(var i=0;i<9;i++) {
-        var randomNum = Math.floor(Math.random()*721 + 1);
-        selectedpokemon.push(pokemon.results[randomNum].name);
+        var randomNum = Math.floor(Math.random()*151 + 1);
+        selectedpokemon.push(pokemon.objects[randomNum].pokemon.name);
+        pokeImgs.push(pokemon.objects[randomNum].image);
       }
       this.setState({
-        selectedPokemon: selectedpokemon
+        selectedPokemon: selectedpokemon,
+        pokemonImages: pokeImgs
       });
     }.bind(this));
   },
@@ -102,7 +108,7 @@ var HomePage = React.createClass({
 
   render: function() {
     return (
-      <PokemonList pokemon={this.state.selectedPokemon}/>
+      <PokemonList pokemon={this.state.selectedPokemon} images={this.state.pokemonImages}/>
     )
   }
 })
