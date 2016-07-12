@@ -27,16 +27,21 @@ describe('Pokemon Battle', function(){
         expect(text).to.equal('Welcome to Pokemon Battle!')
       })
     })
+
     it('User can see 9 pokemon to choose from', function(){
       browser.get('/pokemon_battle')
-      browser.driver.sleep(10000)
+      var el = element(by.tagName('li'));
+      el.waitReady();
       element.all(by.tagName('li')).then(function(elements){
         expect(elements.length).to.equal(9)
       })
     })
-    it('User can choose a pokemon and enter battle', function (){
-      rowser.get('/pokemon_battle')
-      browser.driver.sleep(10000)
+
+    xit('User can choose a pokemon and enter battle', function (){
+      browser.get('/pokemon_battle')
+      var elements = element.all(by.tagName('li'));
+      browser.driver.wait(protractor.until.elementIsVisible(element));
+      expect(elements.length).to.equal(9)
     })
   })
 })

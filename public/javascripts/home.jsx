@@ -10,47 +10,53 @@ var Pokemon = React.createClass({
 
 var PokemonList = React.createClass({
 
-  getInitialState: function(){
-    return {
-      pokemons: [],
-      rendered: false
-    }
-  },
+  // getInitialState: function(){
+  //   return {
+  //     pokemons: [],
+  //     rendered: false
+  //   }
+  // },
 
-  apiCall: function () {
-    if (this.state.rendered) return;
-    console.log("Hey I was called yo!")
-    var pokeArray = [];
-    for(var i=0;i<9;i++) {
-      var randomNum = Math.floor(Math.random()*700 + 1);
-      var pokeApi = "http://pokeapi.co/api/v2/pokemon/" + randomNum;
-      var pokePromise = $.get(pokeApi)
-      pokeArray.push(pokePromise)
-    }
-    Promise.all(pokeArray).then((resultArray) => {
-      var finalArray = resultArray.map(function (item) {
-        return {
-          name: item.name,
-          moves: item.moves.slice(0,3)
-        }
-      })
-      this.setState({
-        finalArray: finalArray
-      })
-      this.setState({
-        pokemons: this.state.finalArray.map(function(pokemon, index){
-          return (
-            <Pokemon name={pokemon.name} key={index}/>
-          )
-        })
-      });
-      this.setState({
-        rendered: true
-      })
-    })
+  // apiCall: function () {
+  //   if (this.state.rendered) return;
+  //   console.log("Hey I was called yo!")
+  //   // var pokeArray = [];
+  //   var pokeApi = "http://pokeapi.co/api/v2/pokemon?limit=721";
+  //   var pokePromise = $.get(pokeApi)
+  //   pokePromise.then(function(pokemon) {
+  //     var selectedpokemon = [];
+  //     for(var i=0;i<9;i++) {
+  //       var randomNum = Math.floor(Math.random()*721 + 1);
+  //       selectedpokemon.push(pokemon.results[randomNum].name);
+  //     }
+  //   });
+    // for(var i=0;i<9;i++) {
+    //   var randomNum = Math.floor(Math.random()*700 + 1);
+    //   var pokeApi = "http://pokeapi.co/api/v2/pokemon/" + randomNum;
+    //   var pokePromise = $.get(pokeApi)
+    //   pokeArray.push(pokePromise)
+    // }
+  //   Promise.all(pokeArray).then((resultArray) => {
+  //     var finalArray = resultArray.map(function (item) {
+  //       return {
+  //         name: item.name,
+  //         moves: item.moves.slice(0,3)
+  //       }
+  //     })
+  //     this.setState({
+  //       finalArray: finalArray
+  //     })
+  //     this.setState({
 
-
-  },
+  //       })
+  //     });
+  //     this.setState({
+  //       rendered: true
+  //     })
+  //   })
+  //
+  //
+  // },
 
   // pokemons: this.state.finalArray.map(function(pokemon){
   //   return (
@@ -59,10 +65,13 @@ var PokemonList = React.createClass({
   // }),
 
   render: function () {
-      this.apiCall()
+    var pokemons = this.props.pokemon.map(function(pokemon, index){
+      return (
+        <Pokemon name={pokemon} key={index}/>
+      )});
     return (
       <ul>
-        {this.state.pokemons}
+        {pokemons}
       </ul>
     )
   }
@@ -71,9 +80,29 @@ var PokemonList = React.createClass({
 
 var HomePage = React.createClass({
 
+  getInitialState: function() {
+     return {
+       selectedPokemon: []
+     };
+   },
+
+  componentDidMount: function(){
+    this.serverRequest = $.get("http://pokeapi.co/api/v2/pokemon?limit=721", function(pokemon){
+      var selectedpokemon = [];
+      for(var i=0;i<9;i++) {
+        var randomNum = Math.floor(Math.random()*721 + 1);
+        selectedpokemon.push(pokemon.results[randomNum].name);
+      }
+      this.setState({
+        selectedPokemon: selectedpokemon
+      });
+    }.bind(this));
+  },
+
+
   render: function() {
     return (
-      <PokemonList/>
+      <PokemonList pokemon={this.state.selectedPokemon}/>
     )
   }
 })
