@@ -4,8 +4,8 @@ var Pokemon = React.createClass({
   render: function(){
     return (
       <li>
-        <a href={"/pokemon_battle/battle/" + this.props.name}>
-          <img src={"http://pokeapi.co"+this.props.image}/>{this.props.name}
+        <a href={"/pokemon_battle/battle?poke=" + this.props.name}>
+          <img src={"http://pokeapi.co" + this.props.image}/>{this.props.name}
         </a>
       </li>
     )
