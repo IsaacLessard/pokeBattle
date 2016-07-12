@@ -49,6 +49,7 @@ describe('Pokemon Battle', function(){
     })
   })
 
+
   describe('#Battle page', function () {
     it('should show a title', function(){
       browser.get('/pokemon_battle/battle');
@@ -66,6 +67,7 @@ describe('Pokemon Battle', function(){
         expect(elements.length).to.equal(2)
       })
     });
+
     it('should show the data of the selected pokemon', function() {
       browser.get('/pokemon_battle/battle')
       element.all(by.tagName('h3')).getText().then(function(elements){
@@ -74,7 +76,10 @@ describe('Pokemon Battle', function(){
       element.all(by.tagName('img')).getAttribute('src').then(function(elements){
         expect(elements).to.deep.equal(['http://pokeapi.co/media/sprites/pokemon/23.png', 'http://pokeapi.co/media/sprites/pokemon/1.png'])
       })
-      element.all(by.tagName('ul')).then(function(elements) {
+      element.all(by.tagName('button')).then(function(elements) {
+        expect(elements.length).to.equal(6)
+      })
+      element.all(by.tagName('h2')).then(function(elements) {
         expect(elements.length).to.equal(2)
       })
     })
