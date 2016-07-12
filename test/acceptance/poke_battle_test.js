@@ -52,7 +52,7 @@ describe('Pokemon Battle', function(){
 
   describe('#Battle page', function () {
     it('should show a title', function(){
-      browser.get('/pokemon_battle/battle?name=bulb');
+      browser.get('/pokemon_battle/battle?name=bulbasaur');
       element(by.tagName('h1')).getText().then(function(text){
         expect(text).to.equal('Poke Battle!');
       });
@@ -69,7 +69,7 @@ describe('Pokemon Battle', function(){
     });
 
     it('should show the data of the selected pokemon', function() {
-      browser.get('/pokemon_battle/battle?name=bulb')
+      browser.get('/pokemon_battle/battle?name=bulbasaur')
       element.all(by.tagName('h3')).getText().then(function(elements){
         expect(elements).to.deep.equal(['ekans', 'bulbasaur'])
       })

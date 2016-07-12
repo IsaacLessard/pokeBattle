@@ -12,11 +12,13 @@
     "debug": "~2.2.0",
     "express": "~4.13.1",
     "jade": "~1.11.0",
+    "jquery": "^3.1.0",
     "mocha": "^2.5.3",
     "morgan": "~1.6.1",
     "protractor": "^3.3.0",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
+    "requestify": "^0.1.17",
     "serve-favicon": "~2.3.0",
     "supertest": "^1.2.0"
   }
