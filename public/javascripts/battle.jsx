@@ -32,6 +32,14 @@ var ButtonMove = React.createClass({
   }
 });
 
+var GameOverMenu = React.createClass({
+  render: function() {
+    return (
+      <h1 id="gameOverMenu">hello</h1>
+    )
+  }
+});
+
 var BattleScene = React.createClass({
   getInitialState: function() {
     return {
@@ -48,7 +56,8 @@ var BattleScene = React.createClass({
         health: 50,
         sprite: 'http://pokeapi.co/media/sprites/pokemon/1.png',
         moves: [{name: 'razor-wind', damage: 40}, {name: 'swords-dance', damage: 50}, {name: 'cut', damage: 60}]
-      }
+      },
+      gameOver: true
     };
   },
 
@@ -71,10 +80,12 @@ var BattleScene = React.createClass({
         <PlayerScene currentPlayer={this.state.player1} opponent={this.state.player2} updateHealth={this.updateHealth} />
         <hr />
         <PlayerScene currentPlayer={this.state.player2} opponent={this.state.player1} updateHealth={this.updateHealth} />
+        <GameOverMenu />
       </div>
     )
   }
 })
+
 
 
 ReactDOM.render(<BattleScene/>, document.getElementById('battle-entrypoint'))

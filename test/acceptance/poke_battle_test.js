@@ -84,4 +84,19 @@ describe('Pokemon Battle', function(){
       })
     })
   })
+
+  describe('#Game Over', function(){
+
+    describe('Player can choose a new pokemon', function(){
+
+      it('should display options', function(){
+        browser.get('/poke_battle/battle')
+        element(by.id('gaveOverMenu')).isPresent().then(function(here){
+          expect(here).to.be.true
+        })
+      })
+    })
+  })
+
+
 })
