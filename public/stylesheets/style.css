@@ -6,3 +6,12 @@ body {
 a {
   color: #00B7FF;
 }
+
+
+#battle-entrypoint {
+  display: flex;
+}
+
+.battlePoke {
+  flex-direction: row;
+}

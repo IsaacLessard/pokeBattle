@@ -44,4 +44,35 @@ describe('Pokemon Battle', function(){
       expect(elements.length).to.equal(9)
     })
   })
+
+  describe('#Battle page', function () {
+    it('should show a title', function(){
+      browser.get('/pokemon_battle/battle');
+      element(by.tagName('h1')).getText().then(function(text){
+        expect(text).to.equal('Poke Battle!');
+      });
+    });
+
+    it('should have profile name and picctures of the 2 pokemons', function(){
+      browser.get('/pokemon_battle/battle');
+      element.all(by.tagName('h3')).then(function(elements){
+        expect(elements.length).to.equal(2)
+      })
+      element.all(by.tagName('img')).then(function(elements){
+        expect(elements.length).to.equal(2)
+      })
+    });
+    it('should show the data of the selected pokemon', function() {
+      browser.get('/pokemon_battle/battle')
+      element.all(by.tagName('h3')).getText().then(function(elements){
+        expect(elements).to.deep.equal(['ekans', 'bulbasaur'])
+      })
+      element.all(by.tagName('img')).getAttribute('src').then(function(elements){
+        expect(elements).to.deep.equal(['http://pokeapi.co/media/sprites/pokemon/23.png', 'http://pokeapi.co/media/sprites/pokemon/1.png'])
+      })
+      element.all(by.tagName('ul')).then(function(elements) {
+        expect(elements.length).to.equal(2)
+      })
+    })
+  })
 })
