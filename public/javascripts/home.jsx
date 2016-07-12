@@ -3,7 +3,7 @@ var Pokemon = React.createClass({
 
   render: function(){
     return (
-      <li><img src={"http://pokeapi.co"+this.props.image}/>{this.props.name}</li>
+      <li><img src={"http://pokeapi.co" + this.props.image}/>{this.props.name}</li>
     )
   }
 })
