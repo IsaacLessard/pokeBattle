@@ -14,7 +14,7 @@ var PlayerScene = React.createClass({
 
   render: function() {
     return (
-      <div class="battlePoke">
+      <div className="battlePoke">
         <h3>{this.props.data.name}</h3>
         <img src={this.props.data.sprite}></img>
         <ul>
