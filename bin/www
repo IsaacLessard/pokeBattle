@@ -31,9 +31,12 @@ server.on('listening', onListening);
 
 var io = require('socket.io')(server);
 io.on('connection', function(socket){
-  socket.on('testing', function() {
-    console.log('++++++++++++++++++++++++++++++++++++++++++++');
-    io.emit('testing', 'hi');
+  socket.on('lobby', function(pokemon) {
+    io.emit('game', {
+      gameOver: false,
+      turn: 1,
+      nextMove: null
+    });
   });
 });
 
