@@ -11,8 +11,6 @@ router.get('/battle', function(req, res) {
   var pokeCharacter = req.params.poke || 'bulbasaur';
   var path = "http://pokeapi.co/api/v2/pokemon/" + pokeCharacter;
 
-  res.render('pokemon_battle/battle')
-
   // requestify.get(path)
   //   .then(function(response) {
   //       // Get the response body (JSON parsed or jQuery object for XMLs)
@@ -20,6 +18,7 @@ router.get('/battle', function(req, res) {
   //       console.log(response.getBody());
   //       res.render('pokemon_battle/battle')
   //   });
+  res.render('pokemon_battle/battle')
 
 })
 
