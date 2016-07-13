@@ -43,20 +43,20 @@ var GameOverMenu = React.createClass({
 var BattleScene = React.createClass({
   getInitialState: function() {
     return {
-      // player1: {
-      //   player: 1,
-      //   name: 'ekans',
-      //   health: 100,
-      //   sprite: 'http://pokeapi.co/media/sprites/pokemon/23.png',
-      //   moves: [{name: 'bind', damage: 10}, {name: 'slam', damage: 20}, {name: 'headbutt', damage: 30}]
-      // },
-      player1: {},
-      player2: {
-        player: 2,
+      player1: {
+        player: 1,
         name: 'ekans',
         health: 100,
         sprite: 'http://pokeapi.co/media/sprites/pokemon/23.png',
         moves: [{name: 'bind', damage: 10}, {name: 'slam', damage: 20}, {name: 'headbutt', damage: 30}]
+      },
+      // player1: {},
+      player2: {
+        player: 2,
+        name: 'bulbasaur',
+        health: 50,
+        sprite: 'http://pokeapi.co/media/sprites/pokemon/1.png',
+        moves: [{name: 'bind', damage: 40}, {name: 'slam', damage: 50}, {name: 'headbutt', damage: 60}]
       },
       gameOver: true
     };
