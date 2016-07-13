@@ -35,7 +35,11 @@ var ButtonMove = React.createClass({
 var GameOverMenu = React.createClass({
   render: function() {
     return (
-      <h1 id="gameOverMenu">hello</h1>
+      <div id="gameOverMenu">
+        <h2>REMATCH</h2>
+        <h2><a href="/pokemon_battle">CHOOSE A NEW POKEMON</a></h2>
+        <h2><a href="/pokemon_battle/battle">FIND NEW OPPONENT</a></h2>
+      </div>
     )
   }
 });
@@ -43,20 +47,20 @@ var GameOverMenu = React.createClass({
 var BattleScene = React.createClass({
   getInitialState: function() {
     return {
-      // player1: {
-      //   player: 1,
-      //   name: 'ekans',
-      //   health: 100,
-      //   sprite: 'http://pokeapi.co/media/sprites/pokemon/23.png',
-      //   moves: [{name: 'bind', damage: 10}, {name: 'slam', damage: 20}, {name: 'headbutt', damage: 30}]
-      // },
-      player1: {},
-      player2: {
-        player: 2,
+      player1: {
+        player: 1,
         name: 'ekans',
         health: 100,
         sprite: 'http://pokeapi.co/media/sprites/pokemon/23.png',
         moves: [{name: 'bind', damage: 10}, {name: 'slam', damage: 20}, {name: 'headbutt', damage: 30}]
+      },
+      // player1: {},
+      player2: {
+        player: 2,
+        name: 'bulbasaur',
+        health: 100,
+        sprite: 'http://pokeapi.co/media/sprites/pokemon/23.png',
+        moves: [{name: 'bind', damage: 10}, {name: 'notSlam', damage: 20}, {name: 'headbutt', damage: 30}]
       },
       gameOver: true
     };
