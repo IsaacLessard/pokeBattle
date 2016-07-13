@@ -23,6 +23,6 @@ describe('battle dynamics', function(){
     element(by.id('slam')).click();
     element(by.id('2')).getText().then(function (text) {
       expect(text).to.equal('30')
-    })
-	})
-})
+    });
+	});
+});
