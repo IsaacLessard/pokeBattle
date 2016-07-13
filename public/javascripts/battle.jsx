@@ -43,14 +43,7 @@ var GameOverMenu = React.createClass({
 var BattleScene = React.createClass({
   getInitialState: function() {
     return {
-      player1: {
-        player: 1,
-        name: 'ekans',
-        health: 100,
-        sprite: 'http://pokeapi.co/media/sprites/pokemon/23.png',
-        moves: [{name: 'bind', damage: 10}, {name: 'slam', damage: 20}, {name: 'headbutt', damage: 30}]
-      },
-      // player1: {},
+      player1: $('#battle-entrypoint').data('pokedata'),
       player2: {
         player: 2,
         name: 'bulbasaur',
@@ -83,10 +76,10 @@ var BattleScene = React.createClass({
         <PlayerScene currentPlayer={this.state.player2} opponent={this.state.player1} updateHealth={this.updateHealth} />
         <GameOverMenu />
       </div>
-    )
+    );
   }
-})
+});
 
 
 
-ReactDOM.render(<BattleScene/>, document.getElementById('battle-entrypoint'))
+ReactDOM.render(<BattleScene/>, document.getElementById('battle-entrypoint'));
