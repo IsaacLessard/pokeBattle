@@ -30,7 +30,7 @@ describe('Pokemon Battle', function(){
       })
     })
 
-    it('User can see 9 pokemon to choose from', function(){
+    xit('User can see 9 pokemon to choose from', function(){
       // browser.get('/pokemon_battle')
       browser.wait(EC.presenceOf(element(by.tagName('li'))), 30000);
       element.all(by.tagName('li')).then(function(elements){
@@ -41,7 +41,7 @@ describe('Pokemon Battle', function(){
       })
     })
 
-    it('User can choose a pokemon and enter battle', function (){
+    xit('User can choose a pokemon and enter battle', function (){
       element(by.tagName('a')).click()
       element(by.tagName('h1')).getText().then(function(text){
         expect(text).to.equal('Poke Battle!');
@@ -79,7 +79,7 @@ describe('Pokemon Battle', function(){
       element.all(by.tagName('button')).then(function(elements) {
         expect(elements.length).to.equal(6)
       })
-      element.all(by.tagName('h2')).then(function(elements) {
+      element.all(by.id('pokemon-health')).then(function(elements) {
         expect(elements.length).to.equal(2)
       })
     })
@@ -87,17 +87,42 @@ describe('Pokemon Battle', function(){
 
   describe('#Game Over', function(){
 
+    it('should display options', function(){
+      browser.get('/pokemon_battle/battle')
+      element(by.id('gameOverMenu')).isPresent().then(function(here){
+        expect(here).to.be.true
+      })
+    })
+
     describe('Player can choose a new pokemon', function(){
 
-      it('should display options', function(){
-        browser.get('/poke_battle/battle')
-        browser.driver.sleep(2000)
-        // element(by.id('gaveOverMenu')).isPresent().then(function(here){
-        //   expect(here).to.be.true
-        // })
-        element(by.id('gameOverMenu')).getText().then(function(here){
-          console.log("Running last: ", here)
+      it('Player can choose option to pick new pokemon', function(){
+        browser.get('/pokemon_battle/battle')
+        element(by.id('new_battle')).click()
+        element(by.tagName('h1')).getText().then(function(text){
+          expect(text).to.equal('Welcome to Pokemon Battle!')
         })
+      })
+    })
+
+    describe('Player can find a new battle with current pokemon', function() {
+
+      it('Can choose option to find new opponent with current pokemon', function() {
+        browser.get('/pokemon_battle/battle')
+        element(by.id('find_opponent')).click()
+        element(by.tagName('h1')).getText().then(function(text){
+          expect(text).to.equal('Poke Battle!')
+        })
+      })
+
+      it('should have the same pokemon from the previous battle', function(){
+        browser.get('/pokemon_battle/battle?poke=ekans')
+        element(by.id('find_opponent')).click()
+        browser.getCurrentUrl().then(function(url){
+          url = url.split('?')[1]
+          expect(url).to.equal('poke=ekans')
+        })
+
       })
     })
   })

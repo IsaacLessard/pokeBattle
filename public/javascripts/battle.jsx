@@ -9,7 +9,7 @@ var PlayerScene = React.createClass({
     return (
       <div className="battlePoke">
         <h3>{this.props.currentPlayer.name}</h3>
-        <h2>Health: <span id={this.props.currentPlayer.player}>{this.props.currentPlayer.health}</span></h2>
+        <h2 id="pokemon-health">Health: <span id={this.props.currentPlayer.player}>{this.props.currentPlayer.health}</span></h2>
         <img src={this.props.currentPlayer.sprite}></img>
         <div>
           {this.getMoveButtons()}
@@ -37,8 +37,8 @@ var GameOverMenu = React.createClass({
     return (
       <div id="gameOverMenu">
         <h2>REMATCH</h2>
-        <h2><a href="/pokemon_battle">CHOOSE A NEW POKEMON</a></h2>
-        <h2><a href="/pokemon_battle/battle">FIND NEW OPPONENT</a></h2>
+        <h2><a id="new_battle" href="/pokemon_battle">CHOOSE A NEW POKEMON</a></h2>
+        <h2><a id="find_opponent" href={'/pokemon_battle/battle?poke='+this.props.currentPokemon}>FIND NEW OPPONENT</a></h2>
       </div>
     )
   }
@@ -85,7 +85,7 @@ var BattleScene = React.createClass({
         <PlayerScene currentPlayer={this.state.player1} opponent={this.state.player2} updateHealth={this.updateHealth} />
         <hr />
         <PlayerScene currentPlayer={this.state.player2} opponent={this.state.player1} updateHealth={this.updateHealth} />
-        <GameOverMenu />
+        <GameOverMenu currentPokemon={this.state.player1.name}/>
       </div>
     )
   }
