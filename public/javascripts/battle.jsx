@@ -6,16 +6,20 @@ var PlayerScene = React.createClass({
   },
 
   render: function() {
-    return (
-      <div className="battlePoke">
-        <h3>{this.props.currentPlayer.name}</h3>
-        <h2 id="pokemon-health">Health: <span id={this.props.currentPlayer.player}>{this.props.currentPlayer.health}</span></h2>
-        <img src={this.props.currentPlayer.sprite}></img>
-        <div>
-          {this.getMoveButtons()}
+    var playerSceneDiv = null;
+    if (!this.props.gameOver) {
+      playerSceneDiv = (
+        <div className="battlePoke">
+          <h3>{this.props.currentPlayer.name}</h3>
+          <h2 id="pokemon-health">Health: <span id={this.props.currentPlayer.player}>{this.props.currentPlayer.health}</span></h2>
+          <img src={this.props.currentPlayer.sprite}></img>
+          <div>
+            {this.getMoveButtons()}
+          </div>
         </div>
-      </div>
-    )
+      )
+    }
+    return playerSceneDiv
   }
 });
 
@@ -71,7 +75,7 @@ var BattleScene = React.createClass({
         moves: [{name: 'bind', damage: 40}, {name: 'slammer', damage: 50}, {name: 'headbutt', damage: 60}],
         defeated: false
       },
-      gameOver: true
+      gameOver: false
     };
   },
 
@@ -82,6 +86,7 @@ var BattleScene = React.createClass({
     if (victimPlayer.health <= 0) {
       victimPlayer.health = 0
       victimPlayer.defeated = true
+      this.state.gameOver = true
     };
 
     if (victimPlayer.player == 1) {
@@ -94,9 +99,9 @@ var BattleScene = React.createClass({
   render: function() {
     return (
       <div>
-        <PlayerScene currentPlayer={this.state.player1} opponent={this.state.player2} updateHealth={this.updateHealth} />
+        <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player1} opponent={this.state.player2} updateHealth={this.updateHealth} />
         <hr />
-        <PlayerScene currentPlayer={this.state.player2} opponent={this.state.player1} updateHealth={this.updateHealth} />
+        <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player2} opponent={this.state.player1} updateHealth={this.updateHealth} />
         <GameOverMenu currentPokemon={this.state.player1.name} currentPlayer={this.state.player1} opponent={this.state.player2}/>
       </div>
     );
