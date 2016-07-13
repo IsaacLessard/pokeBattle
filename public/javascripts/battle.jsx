@@ -34,13 +34,27 @@ var ButtonMove = React.createClass({
 
 var GameOverMenu = React.createClass({
   render: function() {
-    return (
-      <div id="gameOverMenu">
-        <h2>REMATCH</h2>
-        <h2><a id="new_battle" href="/pokemon_battle">CHOOSE A NEW POKEMON</a></h2>
-        <h2><a id="find_opponent" href={'/pokemon_battle/battle?poke='+this.props.currentPokemon}>FIND NEW OPPONENT</a></h2>
-      </div>
-    )
+    var el = null;
+    if (this.props.opponent.defeated){
+      el = (
+        <div id="gameOverMenu">
+          <h4 id="result_message">You win!!!</h4>
+          <h2>REMATCH</h2>
+          <h2><a id="new_battle" href="/pokemon_battle">CHOOSE A NEW POKEMON</a></h2>
+          <h2><a id="find_opponent" href={'/pokemon_battle/battle?poke='+this.props.currentPokemon}>FIND NEW OPPONENT</a></h2>
+        </div>
+      )
+    }else if (this.props.currentPlayer.defeated) {
+      el = (
+        <div id="gameOverMenu">
+          <h4 id="result_message">You lose!!!</h4>
+          <h2>REMATCH</h2>
+          <h2><a id="new_battle" href="/pokemon_battle">CHOOSE A NEW POKEMON</a></h2>
+          <h2><a id="find_opponent" href={'/pokemon_battle/battle?poke='+this.props.currentPokemon}>FIND NEW OPPONENT</a></h2>
+        </div>
+      )
+    }
+    return el
   }
 });
 
@@ -52,7 +66,8 @@ var BattleScene = React.createClass({
         name: 'ekans',
         health: 100,
         sprite: 'http://pokeapi.co/media/sprites/pokemon/23.png',
-        moves: [{name: 'bind', damage: 10}, {name: 'slam', damage: 20}, {name: 'headbutt', damage: 30}]
+        moves: [{name: 'bind', damage: 10}, {name: 'slam', damage: 20}, {name: 'headbutt', damage: 30}],
+        defeated: false
       },
       // player1: {},
       player2: {
@@ -60,7 +75,8 @@ var BattleScene = React.createClass({
         name: 'bulbasaur',
         health: 50,
         sprite: 'http://pokeapi.co/media/sprites/pokemon/1.png',
-        moves: [{name: 'bind', damage: 40}, {name: 'slam', damage: 50}, {name: 'headbutt', damage: 60}]
+        moves: [{name: 'bind', damage: 40}, {name: 'slammer', damage: 50}, {name: 'headbutt', damage: 60}],
+        defeated: false
       },
       gameOver: true
     };
@@ -70,7 +86,10 @@ var BattleScene = React.createClass({
     if (victimPlayer.health <= 0) return;
 
     victimPlayer.health -= damage;
-    if (victimPlayer.health <= 0) victimPlayer.health = 0;
+    if (victimPlayer.health <= 0) {
+      victimPlayer.health = 0
+      victimPlayer.defeated = true
+    };
 
     if (victimPlayer.player == 1) {
       this.setState({player1: victimPlayer});
@@ -85,7 +104,7 @@ var BattleScene = React.createClass({
         <PlayerScene currentPlayer={this.state.player1} opponent={this.state.player2} updateHealth={this.updateHealth} />
         <hr />
         <PlayerScene currentPlayer={this.state.player2} opponent={this.state.player1} updateHealth={this.updateHealth} />
-        <GameOverMenu currentPokemon={this.state.player1.name}/>
+        <GameOverMenu currentPokemon={this.state.player1.name} currentPlayer={this.state.player1} opponent={this.state.player2}/>
       </div>
     )
   }
