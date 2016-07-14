@@ -13,7 +13,7 @@ router.get('/yolobro', function(req, res, next) {
 })
 
 router.get('/battle', function(req, res) {
-  var pokeCharacter = req.query.poke || 'bulbasaur';
+  var pokeCharacter = req.query.poke || 'togepi';
   var path = "http://pokeapi.co/api/v2/pokemon/" + pokeCharacter;
   request(path, function (error, response, body) {
     if (!error && response.statusCode == 200) {

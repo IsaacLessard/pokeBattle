@@ -3,12 +3,10 @@ var Pokemon = React.createClass({
 
   render: function(){
     return (
-      <li>
-        <div className="pokeSelectElement">
+      <li className="pokeSelectElement">
           <a href={"/pokemon_battle/battle?poke=" + this.props.name}>
             <img src={"http://pokeapi.co" + this.props.image}/>{this.props.name}
           </a>
-        </div>
       </li>
     )
   }
@@ -41,12 +39,13 @@ var HomePage = React.createClass({
    },
 
   componentDidMount: function(){
-    this.serverRequest = $.get("http://pokeapi.co/api/v1/sprite/?limit=151", function(pokemon){
+    this.serverRequest = $.get("http://pokeapi.co/api/v1/sprite/?limit=152", function(pokemon){
       console.log(pokemon);
       var selectedpokemon = [];
       var pokeImgs = [];
-      for(var i=0;i<9;i++) {
-        var randomNum = Math.floor(Math.random()*151 + 1);
+      for(var i=1;i<152;i++) {
+        var randomNum =  i
+        //Math.floor(Math.random()*151 + 1);
         selectedpokemon.push(pokemon.objects[randomNum].pokemon.name);
         pokeImgs.push(pokemon.objects[randomNum].image);
       }
