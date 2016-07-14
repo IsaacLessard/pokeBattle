@@ -88,30 +88,35 @@ var BattleScene = React.createClass({
   componentDidMount: function () {
     this.socket = io();
     this.socket.on('attack', this._moveAttack);
+    this.socket.on('lobby', this._lobby);
+    this.socket.on('game', this._game);
 
 
     this.socket.on('connect', function(data) {
       this.socket.emit('lobby', this.state.player1);
-      this.socket.on('lobby', function(room) {
-        this.setState({myRoom: room})
-        this.socket.emit('game', {
-          room: room,
-          pokemon: this.state.player1
-        })
-        this.socket.on('game', function (info) {
-          console.log('game: ', info.name)
-          if(!this.state.sentTwice) {
-            this.setState({
-              sentTwice: true
-            })
-            this.socket.emit('lobby', this.state.player1)
-          }
-          this.setState({
-            player2: info
-          })
-        }.bind(this))
-      }.bind(this))
+
     }.bind(this))
+  },
+
+  _lobby: function(room) {
+    this.setState({myRoom: room});
+    this.socket.emit('game', {
+      room: room,
+      pokemon: this.state.player1
+    });
+  },
+
+  _game: function (info) {
+    console.log('game: ', info.name)
+    if(!this.state.sentTwice) {
+      this.setState({
+        sentTwice: true
+      })
+      this.socket.emit('lobby', this.state.player1)
+    }
+    this.setState({
+      player2: info
+    })
   },
 
   _moveAttack: function(someMove) {
