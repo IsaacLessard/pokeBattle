@@ -7,7 +7,7 @@ var PlayerScene = React.createClass({
 
   render: function() {
     var playerSceneDiv = null;
-    if (!this.props.gameOver) {
+    if (!this.props.gameOver && this.props.player2) {
       playerSceneDiv = (
         <div className="battlePoke">
           <h3>{this.props.currentPlayer.name}</h3>
@@ -39,6 +39,7 @@ var ButtonMove = React.createClass({
 var GameOverMenu = React.createClass({
   render: function() {
     var el = null;
+    if (this.props.opponent == null) return (<p>ERROR YO</p>)
     if (this.props.opponent.defeated){
       el = (
         <div id="gameOverMenu">
@@ -67,16 +68,31 @@ var BattleScene = React.createClass({
     return {
       player1: $('#battle-entrypoint').data('pokedata'),
 
-      player2: {
-        player: 2,
-        name: 'bulbasaur',
-        health: 50,
-        sprite: 'http://pokeapi.co/media/sprites/pokemon/1.png',
-        moves: [{name: 'bind', damage: 40}, {name: 'slammer', damage: 50}, {name: 'headbutt', damage: 60}],
-        defeated: false
-      },
+      player2: null,
+      // {
+      //   player: 2,
+      //   name: 'bulbasaur',
+      //   health: 50,
+      //   sprite: 'http://pokeapi.co/media/sprites/pokemon/1.png',
+      //   moves: [{name: 'bind', damage: 40}, {name: 'slammer', damage: 50}, {name: 'headbutt', damage: 60}],
+      //   defeated: false
+      // },
       gameOver: false
     };
+  },
+
+  componentDidMount: function () {
+    console.log('state: ', this.state.player1)
+    var that = this;
+    this.socket = io();
+    this.socket.on('connect', function(data) {
+      this.socket.emit('lobby', this.state.player1)
+      this.socket.on('lobby', function(opponentPokemon) {
+        this.setState({
+          player2: opponentPokemon
+        })
+      }.bind(this))
+    }.bind(this))
   },
 
   updateHealth: function(victimPlayer, damage) {

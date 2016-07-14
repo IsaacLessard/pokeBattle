@@ -30,14 +30,21 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 var io = require('socket.io')(server);
+var rooms = [];
 io.on('connection', function(socket){
   socket.on('lobby', function(pokemon) {
-    io.emit('game', {
-      gameOver: false,
-      turn: 1,
-      nextMove: null
-    });
+    socket.join("room: 1");
+    socket.emit('lobby', "room: 1");
   });
+  socket.on('game', function(info) {
+    socket.broadcast.to(info.room).emit('game', info.pokemon);
+  })
+  socket.on('attack', function(actionInfo) {
+    socket.broadcast.to(actionInfo.room).emit('attack', actionInfo.move)
+  })
+  // socket.on('room: 1', function() {
+  //   socket.in('room: 1').emit('game');
+  // })
 });
 
 /**
