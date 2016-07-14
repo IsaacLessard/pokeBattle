@@ -59,13 +59,15 @@ describe('sockets', function() {
             client2.on('connect', function(data) {
                 client2.emit('lobby', pokemon2);
                 client2.on('lobby', function(roomName) {
-                  expect(roomName).to.equal("room: 1");
+                  expect(roomName).to.equal("Room: 1");
                   client2.emit('game', {
                     room: roomName,
                     pokemon: pokemon2
                   });
                   client1.on('game', function(opponentPokemon) {
                     expect(opponentPokemon.name).to.equal("ekans");
+                    client1.disconnect();
+                    client2.disconnect();
                     done();
                   });
                 });
@@ -87,34 +89,117 @@ describe('sockets', function() {
                 });
                 client1.on('attack', function(move) {
                   expect(move).to.equal("bite");
+                  client1.disconnect();
+                  client2.disconnect();
                   done();
                 })
               });
           });
       });
     });
-    // it('should send attacks', function(done) {
-    //     var client1 = io.connect(socketURL, options);
-    //
-    //     client1.on('connect', function(data) {
-    //         client1.emit('lobby', pokemon);
-    //         var client2 = io.connect(socketURL, options);
-    //         client2.on('connect', function(data) {
-    //             client2.emit('lobby', pokemon);
-    //             client1.on('game', function(gameState1) {
-    //               console.log("Gamestate1:", gameState1)
-    //                 gameState1.nextMove = 'cut';
-    //                 console.log("Emmitting:", gameState1)
-    //                 client1.emit('game', gameState1);
-    //                 client2.on('game', function(gameState2) {
-    //                   console.log("Gamestate2:", gameState2)
-    //                     expect(gameState2.nextMove).to.equal('cut');
-    //                     client1.disconnect();
-    //                     client2.disconnect();
-    //                     done();
-    //                 });
-    //             });
-    //         });
-    //     });
-    // });
+    it('should pair players in different rooms', function(done) {
+      var client1 = io.connect(socketURL, options);
+
+      client1.on('connect', function(data) {
+          client1.emit('lobby', pokemon1);
+          var client2 = io.connect(socketURL, options);
+          client2.on('connect', function(data) {
+              client2.emit('lobby', pokemon2);
+
+              var client3 = io.connect(socketURL, options);
+              client3.on('connect', function(data) {
+                  client3.emit('lobby', pokemon2);
+                  client3.on('lobby', function(roomName) {
+                    expect(roomName).to.equal('Room: 2');
+                    client1.disconnect();
+                    client2.disconnect();
+                    client3.disconnect();
+                    done();
+                  });
+                });
+          });
+      });
+    });
+    it('should only have two people per room', function(done) {
+      var client1 = io.connect(socketURL, options);
+
+      client1.on('connect', function(data) {
+          client1.emit('lobby', pokemon1);
+          var client2 = io.connect(socketURL, options);
+          client2.on('connect', function(data) {
+              client2.emit('lobby', pokemon2);
+
+              var client3 = io.connect(socketURL, options);
+              client3.on('connect', function(data) {
+
+                  client3.emit('lobby', pokemon2);
+
+                  var client4 = io.connect(socketURL, options);
+                  client4.on('connect', function(data) {
+                    client4.emit('lobby', pokemon2);
+
+                    var client5 = io.connect(socketURL, options);
+                    client5.on('connect', function(data) {
+                      client5.emit('lobby', pokemon2);
+
+                      client5.on('lobby', function(roomName) {
+                        expect(roomName).to.equal('Room: 3');
+                        client1.disconnect();
+                        client2.disconnect();
+                        client3.disconnect();
+                        client4.disconnect();
+                        client5.disconnect();
+                        done();
+                      });
+                    })
+
+                  })
+
+                });
+          });
+      });
+    });
+
+    it('should only reset roomcount when people disconnect', function(done) {
+      var client1 = io.connect(socketURL, options);
+
+      client1.on('connect', function(data) {
+          client1.emit('lobby', pokemon1);
+          var client2 = io.connect(socketURL, options);
+          client2.on('connect', function(data) {
+              client2.emit('lobby', pokemon2);
+
+              var client3 = io.connect(socketURL, options);
+              client3.on('connect', function(data) {
+
+                  client3.emit('lobby', pokemon2);
+
+                  var client4 = io.connect(socketURL, options);
+                  client4.on('connect', function(data) {
+                    client4.emit('lobby', pokemon2);
+
+                    var client5 = io.connect(socketURL, options);
+                    client5.on('connect', function(data) {
+
+                      client1.disconnect();
+                      client2.disconnect();
+                      client3.disconnect();
+                      client4.disconnect();
+
+                      client5.emit('lobby', pokemon2);
+
+                      client5.on('lobby', function(roomName) {
+                        expect(roomName).to.equal('Room: 1');
+
+                        client5.disconnect();
+                        done();
+                      });
+                    })
+
+                  })
+
+                });
+          });
+      });
+    });
 });
