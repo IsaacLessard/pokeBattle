@@ -6,9 +6,9 @@ var PlayerScene = React.createClass({
   },
 
   render: function() {
-    var playerSceneDiv = null;
-    var el = null;
-    if (!this.props.player2){
+    var playerSceneDiv = null,
+        el = null;
+    if (!this.props.player2) {
       el = <div>{this.getMoveButtons()}</div>
     }
 
@@ -18,11 +18,14 @@ var PlayerScene = React.createClass({
           <h3>{this.props.currentPlayer.name}</h3>
           <h2 id="pokemon-health">Health: <span id={this.props.currentPlayer.player}>{this.props.currentPlayer.health}</span></h2>
           <img src={this.props.currentPlayer.sprite}></img>
-          {el}
+          <div id="all_buttons">
+            {el}
+          </div>
+          <label id="waiting"></label>
         </div>
-      )
+      );
     }
-    return playerSceneDiv
+    return playerSceneDiv;
   }
 });
 
@@ -90,7 +93,7 @@ var BattleScene = React.createClass({
     this.socket.on('attack', this._moveAttack);
     this.socket.on('lobby', this._lobby);
     this.socket.on('game', this._game);
-
+    this.socket.on('anotherPlayerMove', this._anotherPlayerMove);
 
     this.socket.on('connect', function(data) {
       this.socket.emit('lobby');
@@ -116,16 +119,24 @@ var BattleScene = React.createClass({
       player1: this.state.player1,
       player2: info
     });
-    console.log('player1 status:', this.state.player1.myTurn);
-    console.log('player2 status:', this.state.player2.myTurn);
   },
 
   _moveAttack: function(victim) {
     this.setState({player1: victim});
   },
 
+  _anotherPlayerMove: function() {
+    $('#waiting').text('');
+    $('#all_buttons').show();
+  },
+
   updateHealth: function(victimPlayer, moveObj) {
     if (victimPlayer.health <= 0) return;
+
+    $('#all_buttons').hide();
+    $('#waiting').text('Waiting for your opponent...');
+    this.socket.emit('anotherPlayerMove', this.state.myRoom);
+
     victimPlayer.health -= moveObj.damage;
 
     if (victimPlayer.health <= 0) {

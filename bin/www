@@ -66,6 +66,10 @@ io.on('connection', function(socket){
   socket.on('attack', function(actionInfo) {
     socket.broadcast.to(actionInfo.room).emit('attack', actionInfo.victim);
   });
+
+  socket.on('anotherPlayerMove', function(room) {
+    socket.broadcast.to(room).emit('anotherPlayerMove');
+  });
 });
 
 /**
