@@ -7,15 +7,18 @@ var PlayerScene = React.createClass({
 
   render: function() {
     var playerSceneDiv = null;
+    var el = null;
+    if (!this.props.player2){
+      el = <div>{this.getMoveButtons()}</div>
+    }
+
     if (!this.props.gameOver && this.props.currentPlayer) {
       playerSceneDiv = (
         <div className="battlePoke">
           <h3>{this.props.currentPlayer.name}</h3>
           <h2 id="pokemon-health">Health: <span id={this.props.currentPlayer.player}>{this.props.currentPlayer.health}</span></h2>
           <img src={this.props.currentPlayer.sprite}></img>
-          <div>
-            {this.getMoveButtons()}
-          </div>
+          {el}
         </div>
       )
     }
@@ -90,7 +93,7 @@ var BattleScene = React.createClass({
 
 
     this.socket.on('connect', function(data) {
-      this.socket.emit('lobby', this.state.player1);
+      this.socket.emit('lobby');
     }.bind(this));
   },
 
@@ -104,17 +107,17 @@ var BattleScene = React.createClass({
 
   _game: function (info) {
     if(!this.state.sentTwice) {
-      this.setState({
-        sentTwice: true
-      })
-      var incomingPlayer = {
-        fromClient: true
-      };
-      this.socket.emit('lobby', incomingPlayer)
+      this.setState({ sentTwice: true });
+      this.state.player1.myTurn = true;
+      info.myTurn = false;
+      this.socket.emit('lobby', { fromClient: true });
     }
     this.setState({
+      player1: this.state.player1,
       player2: info
-    })
+    });
+    console.log('player1 status:', this.state.player1.myTurn);
+    console.log('player2 status:', this.state.player2.myTurn);
   },
 
   _moveAttack: function(victim) {
@@ -146,7 +149,7 @@ var BattleScene = React.createClass({
       <div>
         <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player1} opponent={this.state.player2} updateHealth={this.updateHealth} />
         <hr />
-        <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player2} updateHealth={this.updateHealth} />
+        <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player2} updateHealth={this.updateHealth} player2={true}/>
         <GameOverMenu currentPokemon={this.state.player1.name} currentPlayer={this.state.player1} opponent={this.state.player2}/>
       </div>
     );

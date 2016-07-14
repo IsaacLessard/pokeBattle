@@ -36,23 +36,25 @@ var roomNumber = 0;
 var roomName;
 io.on('connection', function(socket){
   socket.on('disconnect', function() {
-    roomNumber = roomNumber - 1
-    clientCount= clientCount - 1
+    roomNumber = roomNumber - 1;
+    clientCount= clientCount - 1;
     if (roomNumber < 1) {
-      roomNumber = 0
+      roomNumber = 0;
     }
     if (clientCount < 1) {
-      clientCount = 1
+      clientCount = 1;
     }
-  })
+  });
+
   socket.on('lobby', function(incomingPlayer) {
-    if (!incomingPlayer.fromClient) {
-      clientCount++
+    if (incomingPlayer && !incomingPlayer.fromClient) {
+      clientCount++;
     }
     if (clientCount % 2 === 0) {
-      roomNumber++
+      roomNumber++;
     }
-    roomName = roomInit + roomNumber
+    console.log('Player:', clientCount, 'Room:', roomNumber);
+    roomName = roomInit + roomNumber;
     socket.join(roomName);
     socket.emit('lobby', roomName);
   });
