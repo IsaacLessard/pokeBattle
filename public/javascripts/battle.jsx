@@ -7,7 +7,6 @@ var PlayerScene = React.createClass({
 
   render: function() {
     var playerSceneDiv = null;
-    // console.log('Curr: ', this.props.currentPlayer)
     if (!this.props.gameOver && this.props.currentPlayer) {
       playerSceneDiv = (
         <div className="battlePoke">
@@ -26,7 +25,6 @@ var PlayerScene = React.createClass({
 
 var ButtonMove = React.createClass({
   attack: function() {
-    console.log('button clicked by', this.props.currentPlayer.player, "reduce opponet health", this.props.opponent.health, 'by', this.props.moveObj.damage);
     this.props.updateHealth(this.props.opponent, this.props.moveObj);
   },
 
@@ -65,19 +63,18 @@ var GameOverMenu = React.createClass({
 });
 
 var BattleScene = React.createClass({
+  // {
+  //   player: 2,
+  //   name: 'bulbasaur',
+  //   health: 50,
+  //   sprite: 'http://pokeapi.co/media/sprites/pokemon/1.png',
+  //   moves: [{name: 'bind', damage: 40}, {name: 'slammer', damage: 50}, {name: 'headbutt', damage: 60}],
+  //   defeated: false
+  // },
   getInitialState: function() {
     return {
       player1: $('#battle-entrypoint').data('pokedata'),
-
       player2: null,
-      // {
-      //   player: 2,
-      //   name: 'bulbasaur',
-      //   health: 50,
-      //   sprite: 'http://pokeapi.co/media/sprites/pokemon/1.png',
-      //   moves: [{name: 'bind', damage: 40}, {name: 'slammer', damage: 50}, {name: 'headbutt', damage: 60}],
-      //   defeated: false
-      // },
       gameOver: false,
       sentTwice: false,
       myRoom: null,
@@ -94,8 +91,7 @@ var BattleScene = React.createClass({
 
     this.socket.on('connect', function(data) {
       this.socket.emit('lobby', this.state.player1);
-
-    }.bind(this))
+    }.bind(this));
   },
 
   _lobby: function(room) {
@@ -107,7 +103,6 @@ var BattleScene = React.createClass({
   },
 
   _game: function (info) {
-    console.log('game: ', info.name)
     if(!this.state.sentTwice) {
       this.setState({
         sentTwice: true
@@ -119,32 +114,28 @@ var BattleScene = React.createClass({
     })
   },
 
-  _moveAttack: function(someMove) {
-    console.log('here is the move', someMove);
+  _moveAttack: function(victim) {
+    this.setState({player1: victim});
   },
 
-  sendOpponentAttack: function(){
-    this.socket.emit('attack',
-      {room:this.state.room, move: this.state.player1.moves[0].name}
-    )
-  },
-
-  updateHealth: function(victimPlayer, moveObj, damage) {
-    console.log('you clicked me!!');
-    this.socket.emit('attack',
-      {room:this.state.room, move: moveObj.name}
-    )
-    victimPlayer.health -= moveObj.damage;
-
+  updateHealth: function(victimPlayer, moveObj) {
     if (victimPlayer.health <= 0) return;
-
     victimPlayer.health -= moveObj.damage;
+
     if (victimPlayer.health <= 0) {
       victimPlayer.health = 0
       victimPlayer.defeated = true
       this.state.gameOver = true
     };
-      this.setState({player2: victimPlayer});
+    this.setState({player2: victimPlayer});
+
+    var attackInfo = {
+      room: this.state.myRoom,
+      move: moveObj.name,
+      damage: moveObj.damage,
+      victim: victimPlayer
+    };
+    this.socket.emit('attack', attackInfo);
   },
 
   render: function() {
