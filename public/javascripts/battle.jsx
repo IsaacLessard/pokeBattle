@@ -7,7 +7,8 @@ var PlayerScene = React.createClass({
 
   render: function() {
     var playerSceneDiv = null;
-    if (!this.props.gameOver) {
+    console.log('Curr: ', this.props.currentPlayer)
+    if (!this.props.gameOver && this.props.currentPlayer) {
       playerSceneDiv = (
         <div className="battlePoke">
           <h3>{this.props.currentPlayer.name}</h3>
@@ -39,6 +40,7 @@ var ButtonMove = React.createClass({
 var GameOverMenu = React.createClass({
   render: function() {
     var el = null;
+    if (this.props.opponent == null) return (<p>ERROR YO</p>)
     if (this.props.opponent.defeated){
       el = (
         <div id="gameOverMenu">
@@ -67,16 +69,48 @@ var BattleScene = React.createClass({
     return {
       player1: $('#battle-entrypoint').data('pokedata'),
 
-      player2: {
-        player: 2,
-        name: 'bulbasaur',
-        health: 50,
-        sprite: 'http://pokeapi.co/media/sprites/pokemon/1.png',
-        moves: [{name: 'bind', damage: 40}, {name: 'slammer', damage: 50}, {name: 'headbutt', damage: 60}],
-        defeated: false
-      },
-      gameOver: false
+      player2: null,
+      // {
+      //   player: 2,
+      //   name: 'bulbasaur',
+      //   health: 50,
+      //   sprite: 'http://pokeapi.co/media/sprites/pokemon/1.png',
+      //   moves: [{name: 'bind', damage: 40}, {name: 'slammer', damage: 50}, {name: 'headbutt', damage: 60}],
+      //   defeated: false
+      // },
+      gameOver: false,
+      sentTwice: false
     };
+  },
+
+  componentDidMount: function () {
+    console.log('state: ', this.state.player1)
+    var that = this;
+    this.socket = io();
+    this.socket.on('connect', function(data) {
+      //console.log('player connected')
+      this.socket.emit('lobby', this.state.player1)
+      this.socket.on('lobby', function(room) {
+        //console.log('lobbyed: joining: ', room)
+        this.socket.emit('game', {
+          room: room,
+          pokemon: this.state.player1
+        })
+        this.socket.on('game', function (info) {
+          console.log('game: ', info.name)
+          if(!this.state.sentTwice) {
+            this.setState({
+              sentTwice: true
+            })
+            this.socket.emit('lobby', this.state.player1)
+          }
+          this.setState({
+            player2: info
+          })
+          console.log('state',this.state)
+        }.bind(this))
+      }.bind(this))
+    }.bind(this))
   },
 
   updateHealth: function(victimPlayer, damage) {
@@ -88,12 +122,7 @@ var BattleScene = React.createClass({
       victimPlayer.defeated = true
       this.state.gameOver = true
     };
-
-    if (victimPlayer.player == 1) {
-      this.setState({player1: victimPlayer});
-    } else {
       this.setState({player2: victimPlayer});
-    }
   },
 
   render: function() {
@@ -101,7 +130,7 @@ var BattleScene = React.createClass({
       <div>
         <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player1} opponent={this.state.player2} updateHealth={this.updateHealth} />
         <hr />
-        <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player2} opponent={this.state.player1} updateHealth={this.updateHealth} />
+        <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player2} updateHealth={this.updateHealth} />
         <GameOverMenu currentPokemon={this.state.player1.name} currentPlayer={this.state.player1} opponent={this.state.player2}/>
       </div>
     );
