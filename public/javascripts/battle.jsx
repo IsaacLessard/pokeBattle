@@ -40,7 +40,7 @@ var ButtonMove = React.createClass({
 var GameOverMenu = React.createClass({
   render: function() {
     var el = null;
-    if (this.props.opponent == null) return (<p>ERROR YO</p>)
+    if (this.props.opponent == null) return (<p>Waiting for opponent to connect...</p>)
     if (this.props.opponent.defeated){
       el = (
         <div id="gameOverMenu">
