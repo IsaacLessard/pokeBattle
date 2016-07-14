@@ -85,10 +85,10 @@ describe('sockets', function() {
               client2.on('lobby', function(roomName) {
                 client2.emit('attack', {
                   room: roomName,
-                  move: "bite"
+                  victim: 100
                 });
                 client1.on('attack', function(move) {
-                  expect(move).to.equal("bite");
+                  expect(move).to.equal(100);
                   client1.disconnect();
                   client2.disconnect();
                   done();

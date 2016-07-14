@@ -107,7 +107,10 @@ var BattleScene = React.createClass({
       this.setState({
         sentTwice: true
       })
-      this.socket.emit('lobby', this.state.player1)
+      var incomingPlayer = {
+        fromClient: true
+      };
+      this.socket.emit('lobby', incomingPlayer)
     }
     this.setState({
       player2: info

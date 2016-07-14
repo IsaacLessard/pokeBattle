@@ -35,18 +35,20 @@ var clientCount = 1;
 var roomNumber = 0;
 var roomName;
 io.on('connection', function(socket){
-  // socket.on('disconnect', function() {
-  //   roomNumber = roomNumber - 1
-  //   clientCount= clientCount - 1
-  //   if (roomNumber < 1) {
-  //     roomNumber = 0
-  //   }
-  //   if (clientCount < 1) {
-  //     clientCount = 1
-  //   }
-  // })
-  socket.on('lobby', function(pokemon) {
-    clientCount++
+  socket.on('disconnect', function() {
+    roomNumber = roomNumber - 1
+    clientCount= clientCount - 1
+    if (roomNumber < 1) {
+      roomNumber = 0
+    }
+    if (clientCount < 1) {
+      clientCount = 1
+    }
+  })
+  socket.on('lobby', function(incomingPlayer) {
+    if (!incomingPlayer.fromClient) {
+      clientCount++
+    }
     if (clientCount % 2 === 0) {
       roomNumber++
     }
@@ -54,10 +56,6 @@ io.on('connection', function(socket){
     socket.join(roomName);
     socket.emit('lobby', roomName);
   });
-  // socket.on('lobby', function(pokemon) {
-  //   socket.join('Room: 1')
-  //   socket.emit('lobby', 'Room: 1')
-  // })
 
   socket.on('game', function(info) {
     socket.broadcast.to(info.room).emit('game', info.pokemon);
