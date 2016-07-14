@@ -7,7 +7,7 @@ var PlayerScene = React.createClass({
 
   render: function() {
     var playerSceneDiv = null;
-    console.log('Curr: ', this.props.currentPlayer)
+    // console.log('Curr: ', this.props.currentPlayer)
     if (!this.props.gameOver && this.props.currentPlayer) {
       playerSceneDiv = (
         <div className="battlePoke">
@@ -27,7 +27,7 @@ var PlayerScene = React.createClass({
 var ButtonMove = React.createClass({
   attack: function() {
     console.log('button clicked by', this.props.currentPlayer.player, "reduce opponet health", this.props.opponent.health, 'by', this.props.moveObj.damage);
-    this.props.updateHealth(this.props.opponent, this.props.moveObj.damage);
+    this.props.updateHealth(this.props.opponent, this.props.moveObj);
   },
 
   render: function() {
@@ -79,19 +79,21 @@ var BattleScene = React.createClass({
       //   defeated: false
       // },
       gameOver: false,
-      sentTwice: false
+      sentTwice: false,
+      myRoom: null,
+      test: false
     };
   },
 
   componentDidMount: function () {
-    console.log('state: ', this.state.player1)
-    var that = this;
     this.socket = io();
+    this.socket.on('attack', this._moveAttack);
+
+
     this.socket.on('connect', function(data) {
-      //console.log('player connected')
-      this.socket.emit('lobby', this.state.player1)
+      this.socket.emit('lobby', this.state.player1);
       this.socket.on('lobby', function(room) {
-        //console.log('lobbyed: joining: ', room)
+        this.setState({myRoom: room})
         this.socket.emit('game', {
           room: room,
           pokemon: this.state.player1
@@ -107,16 +109,31 @@ var BattleScene = React.createClass({
           this.setState({
             player2: info
           })
-          console.log('state',this.state)
         }.bind(this))
       }.bind(this))
     }.bind(this))
   },
 
-  updateHealth: function(victimPlayer, damage) {
+  _moveAttack: function(someMove) {
+    console.log('here is the move', someMove);
+  },
+
+  sendOpponentAttack: function(){
+    this.socket.emit('attack',
+      {room:this.state.room, move: this.state.player1.moves[0].name}
+    )
+  },
+
+  updateHealth: function(victimPlayer, moveObj, damage) {
+    console.log('you clicked me!!');
+    this.socket.emit('attack',
+      {room:this.state.room, move: moveObj.name}
+    )
+    victimPlayer.health -= moveObj.damage;
+
     if (victimPlayer.health <= 0) return;
 
-    victimPlayer.health -= damage;
+    victimPlayer.health -= moveObj.damage;
     if (victimPlayer.health <= 0) {
       victimPlayer.health = 0
       victimPlayer.defeated = true
