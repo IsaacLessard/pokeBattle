@@ -41,11 +41,33 @@ li {
 }
 
 .pokeSelectElement {
+  z-index: 1;
+  background-color: bisque;
   border: 2px solid black;
+  margin: 5px;
   padding: 20px;
   width: 30%;
+  max-width: 400px;
 }
 
+.pokeSelectElement:hover {
+  z-index: 100;
+  background-color: cyan;
+  box-shadow: 0 15px 15px rgba(0,0,0,0.7);
+  position: offset;
+  transform: skew(20deg);
+  animation: shake 2s infinite;
+  animation-direction: alternate;
+}
+
+@keyframes shake {
+  0% {
+    transform: rotateY(15deg);
+  }
+  100% {
+    transform: skewY(-10deg);
+  }
+}
 
 
 .pokeSelectElement a {
