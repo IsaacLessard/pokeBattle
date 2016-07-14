@@ -4,9 +4,11 @@ var Pokemon = React.createClass({
   render: function(){
     return (
       <li>
-        <a href={"/pokemon_battle/battle?poke=" + this.props.name}>
-          <img src={"http://pokeapi.co" + this.props.image}/>{this.props.name}
-        </a>
+        <div className="pokeSelectElement">
+          <a href={"/pokemon_battle/battle?poke=" + this.props.name}>
+            <img src={"http://pokeapi.co" + this.props.image}/>{this.props.name}
+          </a>
+        </div>
       </li>
     )
   }
@@ -20,7 +22,7 @@ var PokemonList = React.createClass({
         <Pokemon name={pokemon} key={index} image={this.props.images[index]}/>
       )}.bind(this));
     return (
-      <ul>
+      <ul className="pokeSelectContainer">
         {pokemons}
       </ul>
     )

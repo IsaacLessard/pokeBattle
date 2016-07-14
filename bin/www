@@ -36,28 +36,21 @@ var roomNumber = 0;
 var roomName;
 io.on('connection', function(socket){
   socket.on('disconnect', function() {
-    console.log('Disconnect: decrementing ',roomNumber, " to ", roomNumber - 1)
     roomNumber = roomNumber - 1
     clientCount= clientCount - 1
     if (roomNumber < 1) {
       roomNumber = 0
-      console.log('reset roomNum')
     }
     if (clientCount < 1) {
       clientCount = 1
-      console.log('reset clientCount')
     }
   })
   socket.on('lobby', function(pokemon) {
-    console.log("in Lobby")
-      console.log('Connection - roomNum is ', roomNumber)
     clientCount++
     if (clientCount % 2 === 0) {
       roomNumber++
-      console.log('room is now ', roomNumber)
     }
     roomName = roomInit + roomNumber
-    console.log("Joining client ", clientCount, " to ", roomName)
     socket.join(roomName);
     socket.emit('lobby', roomName);
   });

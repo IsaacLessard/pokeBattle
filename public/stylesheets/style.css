@@ -9,8 +9,12 @@ a {
 
 
 #battle-entrypoint {
-  display: flex;
+  /*display: flex;*/
   /*position: relative;*/
+}
+
+li {
+  list-style: none;
 }
 
 .battlePoke {
@@ -28,4 +32,26 @@ a {
   margin-top: -100px; /* Negative half of height. */
   margin-left: -250px; /* Negative half of width. */
   z-index:1000;
+}
+
+.pokeSelectContainer {
+  width: 100vw;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.pokeSelectElement {
+  border: 2px solid black;
+  padding: 20px;
+  width: 30%;
+}
+
+
+
+.pokeSelectElement a {
+  text-decoration: none;
+  color: black;
+  letter-spacing: 1px;
+  font-size: 20px;
+  text-transform: uppercase;
 }
