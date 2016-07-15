@@ -5,6 +5,10 @@ var PlayerScene = React.createClass({
     }.bind(this))
   },
 
+  easterEgg: function(ev) {
+    $(ev.target).attr("src", "../images/chris.gif");
+  },
+
   render: function() {
     var playerSceneDiv = null,
         el = null;
@@ -17,7 +21,7 @@ var PlayerScene = React.createClass({
         <div className="battlePoke">
           <h3>{this.props.currentPlayer.name}</h3>
           <h2 id="pokemon-health">Health: <span id={this.props.currentPlayer.player}>{this.props.currentPlayer.health}</span></h2>
-          <img src={this.props.currentPlayer.sprite}></img>
+          <img onClick={this.easterEgg} src={this.props.currentPlayer.sprite}></img>
           <div id="all_buttons">
             {el}
           </div>
@@ -201,11 +205,19 @@ var BattleScene = React.createClass({
   },
 
   render: function() {
+    this.state.player1.sprite = this.state.player1.backSprite;
+    if(this.state.player2) {
+      this.state.player2.sprite = this.state.player2.frontSprite;
+    }
     return (
       <div>
-        <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player1} opponent={this.state.player2} updateHealth={this.updateHealth} />
+        <div className='opponent'>
+          <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player2} updateHealth={this.updateHealth} player2={true}/>
+        </div>
+
         <hr />
-        <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player2} updateHealth={this.updateHealth} player2={true}/>
+        
+        <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player1} opponent={this.state.player2} updateHealth={this.updateHealth} />
         <GameOverMenu currentPokemon={this.state.player1.name} currentPlayer={this.state.player1} opponent={this.state.player2} requestRematch={this.requestRematch} showGameMenu={this.showGameMenu} setRematch={this.setRematch}/>
       </div>
     );
