@@ -5,6 +5,10 @@ var PlayerScene = React.createClass({
     }.bind(this))
   },
 
+  easterEgg: function(ev) {
+    $(ev.target).attr("src", "../images/chris.gif");
+  },
+
   render: function() {
     var playerSceneDiv = null,
         el = null;
@@ -17,7 +21,7 @@ var PlayerScene = React.createClass({
         <div className="battlePoke">
           <h3>{this.props.currentPlayer.name}</h3>
           <h2 id="pokemon-health">Health: <span id={this.props.currentPlayer.player}>{this.props.currentPlayer.health}</span></h2>
-          <img src={this.props.currentPlayer.sprite}></img>
+          <img onClick={this.easterEgg} src={this.props.currentPlayer.sprite}></img>
           <div id="all_buttons">
             {el}
           </div>
