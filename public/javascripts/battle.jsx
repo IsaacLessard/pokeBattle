@@ -12,7 +12,7 @@ var PlayerScene = React.createClass({
       el = <div>{this.getMoveButtons()}</div>
     }
 
-    if (!this.props.gameOver && this.props.currentPlayer) {
+    if (this.props.currentPlayer) {
       playerSceneDiv = (
         <div className="battlePoke">
           <h3>{this.props.currentPlayer.name}</h3>
@@ -42,41 +42,42 @@ var ButtonMove = React.createClass({
 });
 
 var GameOverMenu = React.createClass({
+
   render: function() {
     var el = null;
     if (this.props.opponent == null) return (<p>Waiting for opponent to connect...</p>)
     if (this.props.opponent.defeated){
-      el = (
-        <div id="gameOverMenu">
-          <h4 id="result_message">You win!!!</h4>
-          <h2>REMATCH</h2>
-          <h2><a id="new_battle" href="/pokemon_battle">CHOOSE A NEW POKEMON</a></h2>
-          <h2><a id="find_opponent" href={'/pokemon_battle/battle?poke='+this.props.currentPokemon}>FIND NEW OPPONENT</a></h2>
-        </div>
-      )
+      $('#rematchMenu').hide()
+      $('#gameOverMenu').show()
+
+      $('#result_message').text('You win!!!')
     }else if (this.props.currentPlayer.defeated) {
-      el = (
+      $('#rematchMenu').hide()
+      $('#gameOverMenu').show()
+      $('#result_message').text('You lose!!!')
+    }
+    return (
+      <div className="endResultDiv">
         <div id="gameOverMenu">
-          <h4 id="result_message">You lose!!!</h4>
-          <h2>REMATCH</h2>
+          <h4 id="result_message">...</h4>
+          <h2><a onClick={this.props.requestRematch}>REMATCH</a></h2>
           <h2><a id="new_battle" href="/pokemon_battle">CHOOSE A NEW POKEMON</a></h2>
           <h2><a id="find_opponent" href={'/pokemon_battle/battle?poke='+this.props.currentPokemon}>FIND NEW OPPONENT</a></h2>
         </div>
-      )
-    }
-    return el
+        <h2 id="waitingMessage"></h2>
+        <div id="rematchMenu">
+          <h3>Opponent has requested a rematch... would you like to fight again?</h3>
+          <a onClick={this.props.setRematch}>REMATCH</a>
+          <br/>
+          <a onClick={this.props.showGameMenu}>RUN AWAY</a>
+        </div>
+      </div>
+    )
   }
 });
 
 var BattleScene = React.createClass({
-  // {
-  //   player: 2,
-  //   name: 'bulbasaur',
-  //   health: 50,
-  //   sprite: 'http://pokeapi.co/media/sprites/pokemon/1.png',
-  //   moves: [{name: 'bind', damage: 40}, {name: 'slammer', damage: 50}, {name: 'headbutt', damage: 60}],
-  //   defeated: false
-  // },
+
   getInitialState: function() {
     return {
       player1: $('#battle-entrypoint').data('pokedata'),
@@ -94,13 +95,17 @@ var BattleScene = React.createClass({
     this.socket.on('lobby', this._lobby);
     this.socket.on('game', this._game);
     this.socket.on('anotherPlayerMove', this._anotherPlayerMove);
-
+    this.socket.on('rematch', this._rematch);
+    this.socket.on('acceptRematch', this._resetHealth)
+    this.socket.on('rematchDecline', this._rematchDecline)
     this.socket.on('connect', function(data) {
       this.socket.emit('lobby');
     }.bind(this));
   },
 
   _lobby: function(room) {
+    $('#gameOverMenu').hide()
+    $('#rematchMenu').hide()
     this.setState({myRoom: room});
     this.socket.emit('game', {
       room: room,
@@ -128,6 +133,46 @@ var BattleScene = React.createClass({
   _anotherPlayerMove: function() {
     $('#waiting').text('');
     $('#all_buttons').show();
+  },
+
+  _rematch: function(){
+    $('#rematchMenu').show()
+    $('#gameOverMenu').hide();
+  },
+
+  _resetHealth: function(){
+    console.log('resetting health');
+    var player1 = this.state.player1
+    var player2 =this.state.player2
+    player1.health = 100
+    player1.defeated = false
+    player2.health = 100
+    player2.defeated = false
+    this.setState({
+      player1: player1,
+      player2: player2
+    })
+    $('#rematchMenu').hide()
+  },
+
+  _rematchDecline: function(){
+    $('#gameOverMenu').show()
+  },
+
+  requestRematch: function(){
+    $('#gameOverMenu').hide();
+    $('#rematchMenu').text('Waiting for your opponent...');
+    this.socket.emit('rematch', this.state.myRoom)
+  },
+
+  setRematch: function(){
+    console.log('I was clicked');
+    this.socket.emit('acceptRematch', this.state.myRoom)
+  },
+
+  showGameMenu: function() {
+    $('#gameOverMenu').show();
+    this.socket.emit('rematchDecline', this.state.myRoom)
   },
 
   updateHealth: function(victimPlayer, moveObj) {
@@ -161,7 +206,7 @@ var BattleScene = React.createClass({
         <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player1} opponent={this.state.player2} updateHealth={this.updateHealth} />
         <hr />
         <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player2} updateHealth={this.updateHealth} player2={true}/>
-        <GameOverMenu currentPokemon={this.state.player1.name} currentPlayer={this.state.player1} opponent={this.state.player2}/>
+        <GameOverMenu currentPokemon={this.state.player1.name} currentPlayer={this.state.player1} opponent={this.state.player2} requestRematch={this.requestRematch} showGameMenu={this.showGameMenu} setRematch={this.setRematch}/>
       </div>
     );
   }
