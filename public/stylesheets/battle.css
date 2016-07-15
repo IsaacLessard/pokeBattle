@@ -3,7 +3,20 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background: url(https://hostr.co/file/Xjt1JLMeDk5G/gbc-1080-teal-shadow.png) center center no-repeat;
   background-size: cover;
+  position: relative;
 }
 html {
  background-color: #9CBD0F;
+}
+
+.hiddenDiv {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  bottom: 10px;
+}
+.hiddenDiv:hover {
+  background: url('http://www.m2now.co.nz/wp-content/uploads/2016/07/experiencing-issues-pokemon-go-server-fix.jpg') no-repeat;
+  width: 100vw;
+  height: 100vh;
 }

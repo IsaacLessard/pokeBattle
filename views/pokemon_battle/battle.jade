@@ -3,6 +3,9 @@ extends ../layout
 block content
     h1 Poke Battle!
     div(id="battle-entrypoint" data-pokedata=pokemonData)
+    a(href="/pokeGo")
+      div(class="hiddenDiv")
+
 
     script(type="text/babel" src="../javascripts/battle.jsx")
 
