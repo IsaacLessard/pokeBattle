@@ -1,6 +1,11 @@
 body {
-  padding: 50px;
+  padding: 25%;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: url(https://hostr.co/file/Xjt1JLMeDk5G/gbc-1080-teal-shadow.png) center center no-repeat;
+  background-size: cover;
+}
+html {
+ background-color: #9CBD0F;
 }
 
 a {
@@ -10,7 +15,9 @@ a {
 .opponent {
   text-align: right;
 }
-
+img {
+  height: 500%;
+}
 h3 {
   text-transform: uppercase;
 }
