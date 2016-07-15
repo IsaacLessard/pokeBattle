@@ -1,12 +1,4 @@
-body {
-  padding: 25%;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background: url(https://hostr.co/file/Xjt1JLMeDk5G/gbc-1080-teal-shadow.png) center center no-repeat;
-  background-size: cover;
-}
-html {
- background-color: #9CBD0F;
-}
+
 
 a {
   color: #00B7FF;
@@ -16,7 +8,7 @@ a {
   text-align: right;
 }
 img {
-  height: 500%;
+  height: 30vh;
 }
 h3 {
   text-transform: uppercase;
@@ -28,10 +20,6 @@ li {
 .battlePoke {
   flex-direction: row;
 }
-
-/*#endResultDiv {
-  display: none;
-}*/
 
 #gameOverMenu {
   border: 2px solid black;
@@ -46,44 +34,9 @@ li {
   z-index:1000;
 }
 
-#rematchMenu {
-  border: 2px solid black;
-  background-color: grey;
-  position: fixed;
-  width: 500px;
-  height: 200px;
-  top: 50%;
-  left: 50%;
-  margin-top: -100px; /* Negative half of height. */
-  margin-left: -250px; /* Negative half of width. */
-  z-index:999;
-}
 
-.pokeSelectContainer {
-  width: 100vw;
-  display: flex;
-  flex-wrap: wrap;
-}
 
-.pokeSelectElement {
-  z-index: 1;
-  background-color: bisque;
-  border: 2px solid black;
-  margin: 5px;
-  padding: 20px;
-  width: 30%;
-  max-width: 400px;
-}
 
-.pokeSelectElement:hover {
-  z-index: 100;
-  background-color: cyan;
-  box-shadow: 0 15px 15px rgba(0,0,0,0.7);
-  position: offset;
-  transform: skew(20deg);
-  animation: shake 2s infinite;
-  animation-direction: alternate;
-}
 
 @keyframes shake {
   0% {
