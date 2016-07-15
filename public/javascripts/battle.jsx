@@ -13,7 +13,7 @@ var PlayerScene = React.createClass({
     var playerSceneDiv = null,
         el = null;
     if (!this.props.player2) {
-      el = <div>{this.getMoveButtons()}</div>
+      el = <div id="all_buttons">{this.getMoveButtons()}</div>
     }
 
     if (this.props.currentPlayer) {
@@ -22,7 +22,7 @@ var PlayerScene = React.createClass({
           <h3>{this.props.currentPlayer.name}</h3>
           <h2 id="pokemon-health">Health: <span id={this.props.currentPlayer.player}>{this.props.currentPlayer.health}</span></h2>
           <img onClick={this.easterEgg} src={this.props.currentPlayer.sprite}></img>
-          <div id="all_buttons">
+          <div>
             {el}
           </div>
           <label id="waiting"></label>
@@ -212,11 +212,11 @@ var BattleScene = React.createClass({
     return (
       <div>
         <div className='opponent'>
-          <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player2} updateHealth={this.updateHealth} player2={true}/>
+          <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player2} updateHealth={this.updateHealth} opponent={this.state.player2} player2={true}/>
         </div>
 
         <hr />
-        
+
         <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player1} opponent={this.state.player2} updateHealth={this.updateHealth} />
         <GameOverMenu currentPokemon={this.state.player1.name} currentPlayer={this.state.player1} opponent={this.state.player2} requestRematch={this.requestRematch} showGameMenu={this.showGameMenu} setRematch={this.setRematch}/>
       </div>

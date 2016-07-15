@@ -30,14 +30,14 @@ describe('Pokemon Battle', function(){
       });
     });
 
-    it('User can see 9 pokemon to choose from', function(){
+    it('User can see 151 pokemon to choose from', function(){
       // browser.get('/pokemon_battle')
       browser.wait(EC.presenceOf(element(by.tagName('li'))), 30000);
       element.all(by.tagName('li')).then(function(elements){
-        expect(elements.length).to.equal(9);
+        expect(elements.length).to.equal(151);
       });
       element.all(by.tagName('img')).then(function(elements){
-        expect(elements.length).to.equal(9);
+        expect(elements.length).to.equal(151);
       });
     });
 
@@ -58,7 +58,7 @@ describe('Pokemon Battle', function(){
       });
     });
 
-    it('should have profile name and picctures of the 2 pokemons', function(){
+    it('should have profile name and pictures of the 2 pokemons', function(){
       browser.get('/pokemon_battle/battle');
       element.all(by.tagName('h3')).then(function(elements){
         expect(elements.length).to.equal(2)
@@ -88,7 +88,7 @@ describe('Pokemon Battle', function(){
   describe('#Game Over', function(){
 
 
-    xit('should display options', function(){
+    it('should display options', function(){
       browser.get('/pokemon_battle/battle')
 
       element(by.id('gameOverMenu')).isPresent().then(function(here){
@@ -96,7 +96,7 @@ describe('Pokemon Battle', function(){
       });
     });
 
-    xdescribe('Player can choose a new pokemon', function(){
+    describe('Player can choose a new pokemon', function(){
 
       it('Player can choose option to pick new pokemon', function(){
         browser.get('/pokemon_battle/battle');
@@ -107,7 +107,7 @@ describe('Pokemon Battle', function(){
       });
     });
 
-    xdescribe('Player can find a new battle with current pokemon', function() {
+    describe('Player can find a new battle with current pokemon', function() {
 
       it('Can choose option to find new opponent with current pokemon', function() {
         browser.get('/pokemon_battle/battle');
