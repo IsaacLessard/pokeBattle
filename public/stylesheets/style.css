@@ -78,3 +78,14 @@ li {
   font-size: 20px;
   text-transform: uppercase;
 }
+
+button {
+  display: inline-block;
+  margin-right: 5px;
+  border-radius: 5px;
+  text-transform: capitalize;
+  border: 1px solid #49a5bf;
+  background: #49a5bf;
+  color: #fff;
+  font-size: 12pt;
+}
