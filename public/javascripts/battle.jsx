@@ -216,7 +216,7 @@ var BattleScene = React.createClass({
         </div>
 
         <hr />
-        
+
         <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player1} opponent={this.state.player2} updateHealth={this.updateHealth} />
         <GameOverMenu currentPokemon={this.state.player1.name} currentPlayer={this.state.player1} opponent={this.state.player2} requestRematch={this.requestRematch} showGameMenu={this.showGameMenu} setRematch={this.setRematch}/>
       </div>
