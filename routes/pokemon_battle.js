@@ -23,7 +23,8 @@ router.get('/battle', function(req, res) {
         player: 1,
         name: pokeCharacter,
         health: 100,
-        sprite: body.sprites.front_default
+        frontSprite: body.sprites.front_default,
+        backSprite: body.sprites.back_default
       };
 
       var damagePoints = 10,

@@ -156,11 +156,19 @@ var BattleScene = React.createClass({
   },
 
   render: function() {
+    this.state.player1.sprite = this.state.player1.backSprite;
+    if(this.state.player2) {
+      this.state.player2.sprite = this.state.player2.frontSprite;
+    }
     return (
       <div>
-        <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player1} opponent={this.state.player2} updateHealth={this.updateHealth} />
+        <div className='opponent'>
+          <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player2} updateHealth={this.updateHealth} player2={true}/>
+        </div>
+
         <hr />
-        <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player2} updateHealth={this.updateHealth} player2={true}/>
+
+        <PlayerScene gameOver={this.state.gameOver} currentPlayer={this.state.player1} opponent={this.state.player2} updateHealth={this.updateHealth} />
         <GameOverMenu currentPokemon={this.state.player1.name} currentPlayer={this.state.player1} opponent={this.state.player2}/>
       </div>
     );
